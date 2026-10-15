@@ -1,3 +1,7 @@
+--// FlowUI — Custom UI Library for Flow
+--// Loadstring-compatible, no external dependencies
+--// Supports: Tabs, Toggles, Dropdowns (single + multi), Labels, Buttons, Inputs, ViewportFrames
+
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
@@ -49,6 +53,7 @@ local RARITY_COLORS = {
 	Secret3 = Color3.fromRGB(255, 215, 0),
 }
 
+-- Globals for compatibility
 if not getgenv().Toggles then getgenv().Toggles = {} end
 if not getgenv().Options then getgenv().Options = {} end
 local Toggles = getgenv().Toggles
@@ -80,7 +85,7 @@ local function comma(n)
 end
 
 ----------------------------------------------------------------------
--- TOGGLE OBJECT
+-- TOGGLE OBJECT (compatibility with LinoriaLib Toggles[id])
 ----------------------------------------------------------------------
 local ToggleObj = {}
 ToggleObj.__index = ToggleObj
@@ -115,7 +120,7 @@ function ToggleObj:_updateVisual()
 end
 
 ----------------------------------------------------------------------
--- DROPDOWN OBJECT
+-- DROPDOWN OBJECT (compatibility with LinoriaLib Options[id])
 ----------------------------------------------------------------------
 local DropdownObj = {}
 DropdownObj.__index = DropdownObj
@@ -238,7 +243,7 @@ function DropdownObj:_addListItem(val)
 end
 
 ----------------------------------------------------------------------
--- GROUPBOX
+-- GROUPBOX (container for controls within a tab column)
 ----------------------------------------------------------------------
 local Groupbox = {}
 Groupbox.__index = Groupbox
@@ -581,13 +586,13 @@ function Tab.new(name, contentParent)
 	self._frame.BackgroundTransparency = 1
 	self._frame.Visible = false
 	self._frame.Parent = contentParent
-
+	
 	local columns = Instance.new("Frame")
 	columns.Name = "Columns"
 	columns.Size = UDim2.new(1, 0, 1, 0)
 	columns.BackgroundTransparency = 1
 	columns.Parent = self._frame
-
+	
 	self._leftCol = Instance.new("ScrollingFrame")
 	self._leftCol.Name = "Left"
 	self._leftCol.Size = UDim2.new(0.5, -4, 1, 0)
@@ -599,18 +604,18 @@ function Tab.new(name, contentParent)
 	self._leftCol.CanvasSize = UDim2.new(0, 0, 0, 0)
 	self._leftCol.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	self._leftCol.Parent = columns
-
+	
 	local leftLayout = Instance.new("UIListLayout")
 	leftLayout.Padding = UDim.new(0, 6)
 	leftLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	leftLayout.Parent = self._leftCol
-
+	
 	local leftPad = Instance.new("UIPadding")
 	leftPad.PaddingTop = UDim.new(0, 4)
 	leftPad.PaddingLeft = UDim.new(0, 4)
 	leftPad.PaddingRight = UDim.new(0, 2)
 	leftPad.Parent = self._leftCol
-
+	
 	self._rightCol = Instance.new("ScrollingFrame")
 	self._rightCol.Name = "Right"
 	self._rightCol.Size = UDim2.new(0.5, -4, 1, 0)
@@ -622,12 +627,12 @@ function Tab.new(name, contentParent)
 	self._rightCol.CanvasSize = UDim2.new(0, 0, 0, 0)
 	self._rightCol.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	self._rightCol.Parent = columns
-
+	
 	local rightLayout = Instance.new("UIListLayout")
 	rightLayout.Padding = UDim.new(0, 6)
 	rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	rightLayout.Parent = self._rightCol
-
+	
 	local rightPad = Instance.new("UIPadding")
 	rightPad.PaddingTop = UDim.new(0, 4)
 	rightPad.PaddingLeft = UDim.new(0, 2)
@@ -654,7 +659,7 @@ function Tab:AddRightGroupbox(title)
 end
 
 ----------------------------------------------------------------------
--- RECENT HATCHES
+-- RECENT HATCHES (with pagination + pinned secrets)
 ----------------------------------------------------------------------
 local HatchLog = {}
 HatchLog.__index = HatchLog
@@ -984,13 +989,14 @@ function HatchLog:AddEntry(petName, rarity, oneIn, tier, mutation)
 	if self._page == 1 then
 		self:_render()
 	else
+		-- Update page count
 		local totalPages = math.max(1, math.ceil(#self._entries / self._perPage))
 		self._pageLbl.Text = "Page " .. self._page .. "/" .. totalPages
 	end
 end
 
 ----------------------------------------------------------------------
--- WINDOW
+-- WINDOW (main container)
 ----------------------------------------------------------------------
 local Window = {}
 Window.__index = Window
@@ -1277,6 +1283,10 @@ function Window:AddHatchLog(name)
 		self:_switchTab(name)
 	end)
 
+	if self._tabOrder == 1 then
+		self:_switchTab(name)
+	end
+
 	return log
 end
 
@@ -1376,5 +1386,6 @@ function FlowUI:Notify(text, duration)
 	end)
 end
 
+-- Expose for global access
 getgenv().FlowUI = FlowUI
 return FlowUI
