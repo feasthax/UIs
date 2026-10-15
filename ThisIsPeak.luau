@@ -1,7 +1,3 @@
---// FlowUI — Custom UI Library for Flow
---// Loadstring-compatible, no external dependencies
---// Supports: Tabs, Toggles, Dropdowns (single + multi), Labels, Buttons, Inputs, ViewportFrames
-
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
@@ -53,7 +49,6 @@ local RARITY_COLORS = {
 	Secret3 = Color3.fromRGB(255, 215, 0),
 }
 
--- Globals for compatibility
 if not getgenv().Toggles then getgenv().Toggles = {} end
 if not getgenv().Options then getgenv().Options = {} end
 local Toggles = getgenv().Toggles
@@ -85,7 +80,7 @@ local function comma(n)
 end
 
 ----------------------------------------------------------------------
--- TOGGLE OBJECT (compatibility with LinoriaLib Toggles[id])
+-- TOGGLE OBJECT
 ----------------------------------------------------------------------
 local ToggleObj = {}
 ToggleObj.__index = ToggleObj
@@ -120,7 +115,7 @@ function ToggleObj:_updateVisual()
 end
 
 ----------------------------------------------------------------------
--- DROPDOWN OBJECT (compatibility with LinoriaLib Options[id])
+-- DROPDOWN OBJECT
 ----------------------------------------------------------------------
 local DropdownObj = {}
 DropdownObj.__index = DropdownObj
@@ -243,7 +238,7 @@ function DropdownObj:_addListItem(val)
 end
 
 ----------------------------------------------------------------------
--- GROUPBOX (container for controls within a tab column)
+-- GROUPBOX
 ----------------------------------------------------------------------
 local Groupbox = {}
 Groupbox.__index = Groupbox
@@ -659,7 +654,7 @@ function Tab:AddRightGroupbox(title)
 end
 
 ----------------------------------------------------------------------
--- RECENT HATCHES (with pagination + pinned secrets)
+-- RECENT HATCHES
 ----------------------------------------------------------------------
 local HatchLog = {}
 HatchLog.__index = HatchLog
@@ -989,14 +984,13 @@ function HatchLog:AddEntry(petName, rarity, oneIn, tier, mutation)
 	if self._page == 1 then
 		self:_render()
 	else
-		-- Update page count
 		local totalPages = math.max(1, math.ceil(#self._entries / self._perPage))
 		self._pageLbl.Text = "Page " .. self._page .. "/" .. totalPages
 	end
 end
 
 ----------------------------------------------------------------------
--- WINDOW (main container)
+-- WINDOW
 ----------------------------------------------------------------------
 local Window = {}
 Window.__index = Window
@@ -1382,6 +1376,5 @@ function FlowUI:Notify(text, duration)
 	end)
 end
 
--- Expose for global access
 getgenv().FlowUI = FlowUI
 return FlowUI
