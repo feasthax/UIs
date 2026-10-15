@@ -8442,7 +8442,7 @@ function Library:CreateWindow(...)
                     local front = cf.LookVector;
                     local cam = Instance.new('Camera');
                     cam.FieldOfView = 30;
-                    cam.CFrame = CFrame.new(center - front * maxDim * 1.2 + Vector3.new(0, maxDim * 0.15, 0), center);
+                    cam.CFrame = CFrame.new(center + front * maxDim * 1.2 + Vector3.new(0, maxDim * 0.15, 0), center);
                     cam.Parent = vf;
                     vf.CurrentCamera = cam;
                 end;
