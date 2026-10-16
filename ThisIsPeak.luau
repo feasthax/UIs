@@ -8435,14 +8435,17 @@ function Library:CreateWindow(...)
                 local petModel = RS.Content.Pets:FindFirstChild(entry.name);
                 if petModel then
                     local clone = petModel:Clone();
+                    for _, d in clone:GetDescendants() do
+                        if d:IsA('Script') or d:IsA('LocalScript') then d:Destroy() end;
+                    end;
                     clone.Parent = vf;
                     local cf, size = clone:GetBoundingBox();
                     local maxDim = math.max(size.X, size.Y, size.Z);
                     local center = cf.Position;
-                    local front = cf.LookVector;
+                    local dist = maxDim * 1.5;
                     local cam = Instance.new('Camera');
                     cam.FieldOfView = 30;
-                    cam.CFrame = CFrame.new(center + front * maxDim * 1.2 + Vector3.new(0, maxDim * 0.15, 0), center);
+                    cam.CFrame = CFrame.new(center + Vector3.new(dist * 0.6, maxDim * 0.3, dist * 0.8), center);
                     cam.Parent = vf;
                     vf.CurrentCamera = cam;
                 end;
